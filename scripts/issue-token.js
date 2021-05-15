@@ -1,8 +1,8 @@
-const CoinFarm = artifacts.require('CoinFarm')
+const CoinStake = artifacts.require('CoinStake')
 
 module.exports = async function(callback) {
-  let coinFarm = await CoinFarm.deployed()
-  await coinFarm.issueCoins()
+  let coinStake = await CoinStake.deployed()
+  await coinStake.issueCoins()
   // Code goes here...
   console.log("Coins issued!")
   callback()

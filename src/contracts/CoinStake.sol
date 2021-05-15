@@ -3,8 +3,8 @@ pragma solidity ^0.5.0;
 import "./MockCoin.sol";
 import "./DaiCoin.sol";
 
-contract CoinFarm {
-    string public name = "Mock Coin Farm";
+contract CoinStake {
+    string public name = "Mock Coin Stake";
     address public owner;
     MockCoin public mockCoin;
     DaiCoin public dai;

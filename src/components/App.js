@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Web3 from 'web3'
 import DaiCoin from '../abis/DaiCoin.json'
 import MockCoin from '../abis/MockCoin.json'
-import CoinFarm from '../abis/CoinFarm.json'
+import CoinStake from '../abis/CoinStake.json'
 import Navbar from './Navbar'
 import Main from './Main'
 import './App.css'
@@ -44,15 +44,15 @@ class App extends Component {
       window.alert('MockCoin contract not deployed to detected network.')
     }
 
-    // Load CoinFarm
-    const coinFarmData = CoinFarm.networks[networkId]
-    if(coinFarmData) {
-      const coinFarm = new web3.eth.Contract(CoinFarm.abi, coinFarmData.address)
-      this.setState({ coinFarm })
-      let stakingBalance = await coinFarm.methods.stakingBalance(this.state.account).call()
+    // Load CoinStake
+    const coinStakeData = CoinStake.networks[networkId]
+    if(coinStakeData) {
+      const coinStake = new web3.eth.Contract(CoinStake.abi, coinStakeData.address)
+      this.setState({ coinStake })
+      let stakingBalance = await coinStake.methods.stakingBalance(this.state.account).call()
       this.setState({ stakingBalance: stakingBalance.toString() })
     } else {
-      window.alert('CoinFarm contract not deployed to detected network.')
+      window.alert('CoinStake contract not deployed to detected network.')
     }
 
     this.setState({ loading: false })
@@ -73,8 +73,8 @@ class App extends Component {
 
   stakeCoins = (amount) => {
     this.setState({ loading: true })
-    this.state.dai.methods.approve(this.state.coinFarm._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.coinFarm.methods.stakeCoins(amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.dai.methods.approve(this.state.coinStake._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.coinStake.methods.stakeCoins(amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
         this.setState({ loading: false })
       })
     })
@@ -82,7 +82,7 @@ class App extends Component {
 
   unstakeCoins = (amount) => {
     this.setState({ loading: true })
-    this.state.coinFarm.methods.unstakeCoins().send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.coinStake.methods.unstakeCoins().send({ from: this.state.account }).on('transactionHash', (hash) => {
       this.setState({ loading: false })
     })
   }
@@ -93,7 +93,7 @@ class App extends Component {
       account: '0x0',
       dai: {},
       mockCoin: {},
-      coinFarm: {},
+      coinStake: {},
       daiBalance: '0',
       mockCoinBalance: '0',
       stakingBalance: '0',
